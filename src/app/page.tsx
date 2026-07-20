@@ -36,6 +36,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <link rel="preload" href="/videos/hero-1.mp4" as="video" type="video/mp4" />
       <HeroSection />
       <MenuPreview products={products} />
       <DealsSection deals={deals} />

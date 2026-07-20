@@ -13,47 +13,36 @@ const videos = ["/videos/hero-1.mp4", "/videos/hero-2.mp4", "/videos/hero-3.mp4"
 const HERO_POSTER =
   "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1920&q=80";
 
-function shouldPreferPosterOnly(): boolean {
-  if (typeof window === "undefined") return true;
-  const ua = navigator.userAgent;
-  const ios = /iPad|iPhone|iPod/.test(ua);
-  const safari = /^((?!chrome|android).)*safari/i.test(ua);
-  const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } })
-    .connection;
-  const slowNetwork =
-    conn?.saveData === true ||
-    conn?.effectiveType === "2g" ||
-    conn?.effectiveType === "slow-2g";
-  return ios || (safari && !/Chrome|CriOS|FxiOS/.test(ua)) || slowNetwork;
-}
-
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const [currentVideo, setCurrentVideo] = useState(0);
-  const [useVideo, setUseVideo] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
 
   useEffect(() => {
-    if (shouldPreferPosterOnly()) return;
-    const start = () => setUseVideo(true);
-    if (typeof requestIdleCallback === "function") {
-      const id = requestIdleCallback(start, { timeout: 2000 });
-      return () => cancelIdleCallback(id);
-    }
-    const t = setTimeout(start, 400);
-    return () => clearTimeout(t);
-  }, []);
-
-  useEffect(() => {
-    if (!useVideo) return;
     const interval = setInterval(() => {
       setVideoReady(false);
       setCurrentVideo((prev) => (prev + 1) % videos.length);
     }, 12000);
     return () => clearInterval(interval);
-  }, [useVideo]);
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    setVideoReady(false);
+    video.load();
+
+    const tryPlay = () => {
+      void video.play().catch(() => {});
+    };
+
+    tryPlay();
+    video.addEventListener("loadeddata", tryPlay);
+    return () => video.removeEventListener("loadeddata", tryPlay);
+  }, [currentVideo]);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -101,28 +90,29 @@ export default function HeroSection() {
     <section ref={sectionRef} className="relative h-screen overflow-hidden">
       <div className="absolute inset-0">
         <div
-          className="absolute inset-0 bg-cover bg-center scale-105"
+          className={`absolute inset-0 bg-cover bg-center scale-105 transition-opacity duration-700 ${
+            videoReady ? "opacity-0" : "opacity-100"
+          }`}
           style={{ backgroundImage: `url(${HERO_POSTER})` }}
           aria-hidden
         />
-        {useVideo && (
-          <video
-            key={videos[currentVideo]}
-            ref={videoRef}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster={HERO_POSTER}
-            onCanPlay={() => setVideoReady(true)}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
-              videoReady ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <source src={videos[currentVideo]} type="video/mp4" />
-          </video>
-        )}
+        <video
+          key={videos[currentVideo]}
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster={HERO_POSTER}
+          onCanPlay={() => setVideoReady(true)}
+          onPlaying={() => setVideoReady(true)}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+            videoReady ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <source src={videos[currentVideo]} type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-b from-dark/70 via-dark/50 to-dark" />
       </div>
 

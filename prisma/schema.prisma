@@ -154,4 +154,5 @@ model Settings {
   easypaisaName  String @default("Madni Fast Food")
   facebookHandle String @default("@akmal.raza.9619")
   instagramHandle String @default("@akmal.raza.9619")
+  logoUrl         String?
 }

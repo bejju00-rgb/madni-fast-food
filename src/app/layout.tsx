@@ -20,46 +20,50 @@ const montserrat = Montserrat({
   variable: "--font-montserrat",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: `${SITE_NAME} | Shawarma, Burgers & Pizza Delivery`,
-    template: `%s | ${SITE_NAME}`,
-  },
-  description: SITE_DESCRIPTION,
-  keywords: SITE_KEYWORDS,
-  manifest: "/manifest.json",
-  icons: {
-    icon: "/favicon.svg",
-    apple: "/favicon.svg",
-  },
-  openGraph: {
-    type: "website",
-    locale: "en_PK",
-    url: SITE_URL,
-    siteName: SITE_NAME,
-    title: SITE_NAME,
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getPublicSiteSettings();
+  const icon = settings.logoUrl || "/favicon.svg";
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: `${SITE_NAME} | Shawarma, Burgers & Pizza Delivery`,
+      template: `%s | ${SITE_NAME}`,
+    },
     description: SITE_DESCRIPTION,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: SITE_NAME,
-    description: SITE_DESCRIPTION,
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+    keywords: SITE_KEYWORDS,
+    icons: {
+      icon,
+      apple: icon,
+    },
+    openGraph: {
+      type: "website",
+      locale: "en_PK",
+      url: SITE_URL,
+      siteName: SITE_NAME,
+      title: SITE_NAME,
+      description: SITE_DESCRIPTION,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: SITE_NAME,
+      description: SITE_DESCRIPTION,
+    },
+    robots: {
       index: true,
       follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
-  },
-  alternates: {
-    canonical: SITE_URL,
-  },
-};
+    alternates: {
+      canonical: SITE_URL,
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#0A0A0A",

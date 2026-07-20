@@ -10,6 +10,7 @@ import { useSession, signOut } from "next-auth/react";
 import { useCartStore } from "@/store/cart";
 import { useThemeStore } from "@/store/theme";
 import MagneticButton from "@/components/ui/MagneticButton";
+import BrandLogo from "@/components/ui/BrandLogo";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -51,9 +52,7 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         <Link href="/" data-cursor="pointer" className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-orange rounded-full flex items-center justify-center">
-            <span className="text-white font-bold text-lg">M</span>
-          </div>
+          <BrandLogo size={40} />
           <div className="hidden lg:block max-w-[220px]">
             <span className="font-montserrat font-bold text-sm leading-tight block">Madni Shawarma</span>
             <span className="font-montserrat text-orange font-bold text-sm leading-tight block">Burgur & Pizza</span>

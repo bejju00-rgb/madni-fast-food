@@ -3,8 +3,11 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import ImageUpload from "@/components/admin/ImageUpload";
+import BrandLogo from "@/components/ui/BrandLogo";
 
 type SettingsForm = {
+  logoUrl: string;
   deliveryCharge: number;
   whatsappNumber: string;
   jazzcashNumber: string;
@@ -23,6 +26,7 @@ type AccountForm = {
 };
 
 const emptySettings: SettingsForm = {
+  logoUrl: "",
   deliveryCharge: 150,
   whatsappNumber: "",
   jazzcashNumber: "",
@@ -40,7 +44,16 @@ const emptyAccount: AccountForm = {
   confirmPassword: "",
 };
 
-const settingLabels: Record<keyof SettingsForm, string> = {
+const paymentFieldKeys: (keyof Omit<SettingsForm, "logoUrl">)[] = [
+  "deliveryCharge",
+  "whatsappNumber",
+  "jazzcashNumber",
+  "jazzcashName",
+  "easypaisaNumber",
+  "easypaisaName",
+];
+
+const settingLabels: Record<keyof Omit<SettingsForm, "logoUrl">, string> = {
   deliveryCharge: "Delivery charge (Rs.)",
   whatsappNumber: "WhatsApp number",
   jazzcashNumber: "JazzCash number",
@@ -52,6 +65,7 @@ const settingLabels: Record<keyof SettingsForm, string> = {
 function mapApiToForm(data: Record<string, unknown> | null): SettingsForm {
   if (!data) return emptySettings;
   return {
+    logoUrl: data.logoUrl ? String(data.logoUrl) : "",
     deliveryCharge: Number(data.deliveryCharge ?? 150),
     whatsappNumber: String(data.whatsappNumber ?? ""),
     jazzcashNumber: String(data.jazzcashNumber ?? ""),
@@ -167,6 +181,37 @@ export default function AdminSettingsPage() {
       <h1 className="text-2xl font-montserrat font-black">Settings</h1>
 
       <section className="glass rounded-2xl p-6 space-y-4">
+        <h2 className="font-montserrat font-bold text-lg">Brand logo</h2>
+        <p className="text-white/40 text-sm">
+          Shown in the navbar, footer, sign-in page, and as the icon when customers install the
+          app. Use a square image (PNG or JPG, at least 512×512) for best results.
+        </p>
+        {loading ? (
+          <p className="text-white/50 text-sm">Loading…</p>
+        ) : (
+          <>
+            <div className="flex items-center gap-4">
+              <BrandLogo size={56} />
+              <span className="text-white/40 text-xs">Preview</span>
+            </div>
+            <ImageUpload
+              value={settings.logoUrl}
+              onChange={(url) => setSettings({ ...settings, logoUrl: url })}
+              folder="madni-fast-food/logo"
+              label="Upload logo"
+            />
+          </>
+        )}
+        <button
+          onClick={handleSaveStore}
+          disabled={loading || savingStore}
+          className="px-6 py-3 bg-orange rounded-xl font-semibold disabled:opacity-50"
+        >
+          {savingStore ? "Saving…" : "Save logo"}
+        </button>
+      </section>
+
+      <section className="glass rounded-2xl p-6 space-y-4">
         <h2 className="font-montserrat font-bold text-lg">Store & payments</h2>
         <p className="text-white/40 text-sm">
           WhatsApp, delivery fee, and payment numbers shown across the website. Use format{" "}
@@ -176,7 +221,7 @@ export default function AdminSettingsPage() {
         {loading ? (
           <p className="text-white/50 text-sm">Loading…</p>
         ) : (
-          (Object.keys(settings) as (keyof SettingsForm)[]).map((key) => (
+          paymentFieldKeys.map((key) => (
             <div key={key}>
               <label className="text-sm text-white/50 block mb-1">{settingLabels[key]}</label>
               <input

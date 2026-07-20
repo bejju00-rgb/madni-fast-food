@@ -16,6 +16,7 @@ import {
 import { signOut } from "next-auth/react";
 
 import { ADMIN_NAV_LINKS } from "@/lib/admin-nav";
+import BrandLogo from "@/components/ui/BrandLogo";
 
 const iconByHref: Record<string, typeof LayoutDashboard> = {
   "/admin": LayoutDashboard,
@@ -40,9 +41,7 @@ export default function AdminSidebar() {
     <aside className="w-64 bg-dark border-r border-white/5 flex flex-col min-h-screen hidden lg:flex">
       <div className="p-6 border-b border-white/5">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-orange rounded-full flex items-center justify-center">
-            <span className="text-white font-bold text-sm">M</span>
-          </div>
+          <BrandLogo size={32} textClassName="text-white font-bold text-sm" />
           <div>
             <span className="font-montserrat font-bold text-sm">Madni Shawarma</span>
             <span className="text-orange font-bold text-sm ml-1">Admin</span>

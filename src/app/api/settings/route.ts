@@ -15,6 +15,7 @@ const editableFields = [
   "easypaisaName",
   "facebookHandle",
   "instagramHandle",
+  "logoUrl",
 ] as const;
 
 async function getSettingsRecord() {
@@ -40,9 +41,15 @@ export async function PUT(request: Request) {
 
   try {
     const body = await request.json();
-    const data: Record<string, string | number> = {};
+    const data: Record<string, string | number | null> = {};
     for (const key of editableFields) {
-      if (body[key] !== undefined) data[key] = body[key];
+      if (body[key] !== undefined) {
+        if (key === "logoUrl") {
+          data.logoUrl = body.logoUrl ? String(body.logoUrl) : null;
+        } else {
+          data[key] = body[key];
+        }
+      }
     }
 
     const existing = await getSettingsRecord();

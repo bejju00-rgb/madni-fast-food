@@ -9,6 +9,7 @@ import { signInSchema, signUpSchema } from "@/lib/validations";
 import type { SignInInput, SignUpInput } from "@/lib/validations";
 import toast from "react-hot-toast";
 import { SITE_NAME } from "@/lib/site";
+import BrandLogo from "@/components/ui/BrandLogo";
 
 export default function SignInPage() {
   const [isRegister, setIsRegister] = useState(false);
@@ -58,9 +59,7 @@ export default function SignInPage() {
     <div className="min-h-screen flex items-center justify-center pt-20 section-padding">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-orange rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-white font-bold text-2xl">M</span>
-          </div>
+          <BrandLogo size={64} className="mx-auto mb-4" textClassName="text-white font-bold text-2xl" />
           <h1 className="text-3xl font-montserrat font-black">
             {isRegister ? "Create Account" : "Welcome Back"}
           </h1>

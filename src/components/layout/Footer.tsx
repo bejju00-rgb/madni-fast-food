@@ -6,6 +6,7 @@ import { Phone, MapPin, Facebook, Instagram } from "lucide-react";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useSiteSettings } from "@/components/providers/SiteSettingsProvider";
+import BrandLogo from "@/components/ui/BrandLogo";
 import {
   formatPhoneDisplay,
   whatsAppOrderUrl,
@@ -36,9 +37,7 @@ export default function Footer() {
             transition={{ duration: 0.6 }}
           >
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-orange rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-lg">M</span>
-              </div>
+              <BrandLogo size={40} />
               <span className="font-montserrat font-bold text-xl">Madni Shawarma Burgur & Pizza</span>
             </div>
             <p className="text-white/50 text-sm leading-relaxed">

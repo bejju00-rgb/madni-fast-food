@@ -10,6 +10,7 @@ export type PublicSiteSettings = {
   easypaisaName: string;
   facebookHandle: string;
   instagramHandle: string;
+  logoUrl: string;
 };
 
 export const DEFAULT_SITE_SETTINGS: PublicSiteSettings = {
@@ -21,6 +22,7 @@ export const DEFAULT_SITE_SETTINGS: PublicSiteSettings = {
   easypaisaName: "Madni Fast Food",
   facebookHandle: "akmal.raza.9619",
   instagramHandle: "akmal.raza.9619",
+  logoUrl: "",
 };
 
 function mapSettings(row: Record<string, unknown> | null): PublicSiteSettings {
@@ -40,6 +42,7 @@ function mapSettings(row: Record<string, unknown> | null): PublicSiteSettings {
       /^@/,
       ""
     ),
+    logoUrl: row.logoUrl ? String(row.logoUrl) : "",
   };
 }
 

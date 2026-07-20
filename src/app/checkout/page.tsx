@@ -12,10 +12,13 @@ import { formatPrice } from "@/lib/utils";
 import toast from "react-hot-toast";
 import MagneticButton from "@/components/ui/MagneticButton";
 import { CreditCard, Banknote, Smartphone } from "lucide-react";
+import { useSiteSettings } from "@/components/providers/SiteSettingsProvider";
+import { formatPhoneDisplay } from "@/lib/site-settings";
 
 export default function CheckoutPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const settings = useSiteSettings();
   const { items, totalPrice, clearCart } = useCartStore();
   const [paymentMethod, setPaymentMethod] = useState<string>("CASH_ON_DELIVERY");
   const [loading, setLoading] = useState(false);
@@ -48,7 +51,31 @@ export default function CheckoutPage() {
   }
 
   const subtotal = totalPrice();
-  const deliveryCharge = 150;
+  const deliveryCharge = settings.deliveryCharge;
+
+  const paymentMethods = [
+    {
+      id: "JAZZCASH",
+      label: "JazzCash",
+      icon: Smartphone,
+      details: { number: formatPhoneDisplay(settings.jazzcashNumber), name: settings.jazzcashName },
+    },
+    {
+      id: "EASYPAISA",
+      label: "Easypaisa",
+      icon: CreditCard,
+      details: {
+        number: formatPhoneDisplay(settings.easypaisaNumber),
+        name: settings.easypaisaName,
+      },
+    },
+    {
+      id: "CASH_ON_DELIVERY",
+      label: "Cash on Delivery",
+      icon: Banknote,
+      details: null,
+    },
+  ];
 
   const onSubmit = async (data: CheckoutInput) => {
     setLoading(true);
@@ -82,27 +109,6 @@ export default function CheckoutPage() {
       setLoading(false);
     }
   };
-
-  const paymentMethods = [
-    {
-      id: "JAZZCASH",
-      label: "JazzCash",
-      icon: Smartphone,
-      details: { number: "0322-3572541", name: "Madni Fast Food" },
-    },
-    {
-      id: "EASYPAISA",
-      label: "Easypaisa",
-      icon: CreditCard,
-      details: { number: "0307-6980041", name: "Madni Fast Food" },
-    },
-    {
-      id: "CASH_ON_DELIVERY",
-      label: "Cash on Delivery",
-      icon: Banknote,
-      details: null,
-    },
-  ];
 
   return (
     <div className="min-h-screen pt-24 section-padding">

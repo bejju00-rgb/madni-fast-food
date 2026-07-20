@@ -8,10 +8,12 @@ import CustomCursor from "@/components/ui/CustomCursor";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import ScrollTriggerCleanup from "@/components/providers/ScrollTriggerCleanup";
 import FloatingCart from "@/components/cart/FloatingCart";
+import { SiteSettingsProvider } from "@/components/providers/SiteSettingsProvider";
+import InstallAppButton from "@/components/pwa/InstallAppButton";
+import type { PublicSiteSettings } from "@/lib/site-settings";
 
 function useLightweightMode() {
   const pathname = usePathname();
-  // GSAP + Lenis only on homepage — prevents DOM conflicts on other routes
   return pathname !== "/";
 }
 
@@ -38,28 +40,38 @@ function useShowCustomCursor() {
   return !pathname.startsWith("/admin");
 }
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({
+  children,
+  siteSettings,
+}: {
+  children: React.ReactNode;
+  siteSettings: PublicSiteSettings;
+}) {
   const lightweight = useLightweightMode();
   const showCursor = useShowCustomCursor();
 
   return (
     <SessionProvider>
-      {showCursor && <CustomCursor />}
-      {lightweight ? (
-        <>
-          {children}
-          <FloatingCart />
-          <AppToaster />
-        </>
-      ) : (
-        <SmoothScroll>
-          <ScrollTriggerCleanup />
-          <ScrollProgress />
-          {children}
-          <FloatingCart />
-          <AppToaster />
-        </SmoothScroll>
-      )}
+      <SiteSettingsProvider settings={siteSettings}>
+        {showCursor && <CustomCursor />}
+        {lightweight ? (
+          <>
+            {children}
+            <FloatingCart />
+            <InstallAppButton />
+            <AppToaster />
+          </>
+        ) : (
+          <SmoothScroll>
+            <ScrollTriggerCleanup />
+            <ScrollProgress />
+            {children}
+            <FloatingCart />
+            <InstallAppButton />
+            <AppToaster />
+          </SmoothScroll>
+        )}
+      </SiteSettingsProvider>
     </SessionProvider>
   );
 }

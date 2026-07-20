@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { generateOrderNumber } from "@/lib/utils";
+import { getPublicSiteSettings } from "@/lib/site-settings";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -35,7 +36,7 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const settings = await prisma.settings.findFirst();
+    const siteSettings = await getPublicSiteSettings();
 
     let discount = 0;
     if (body.couponCode) {
@@ -54,7 +55,7 @@ export async function POST(request: Request) {
       }
     }
 
-    const deliveryCharge = settings?.deliveryCharge || 150;
+    const deliveryCharge = siteSettings.deliveryCharge;
     const total = body.subtotal + deliveryCharge - discount;
 
     const order = await prisma.order.create({

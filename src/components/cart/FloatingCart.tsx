@@ -3,14 +3,27 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { X, Plus, Minus, ShoppingBag } from "lucide-react";
+import { X, Plus, Minus, ShoppingBag, MessageCircle } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import { formatPrice } from "@/lib/utils";
 import MagneticButton from "@/components/ui/MagneticButton";
+import { useSiteSettings } from "@/components/providers/SiteSettingsProvider";
+import { whatsAppCartMessage, whatsAppOrderUrl } from "@/lib/site-settings";
 
 export default function FloatingCart() {
   const { items, isOpen, setCartOpen, removeItem, updateQuantity, totalPrice, totalItems } =
     useCartStore();
+  const settings = useSiteSettings();
+
+  const whatsappHref =
+    items.length > 0
+      ? whatsAppOrderUrl(
+          settings.whatsappNumber,
+          whatsAppCartMessage(
+            items.map((i) => ({ name: i.name, quantity: i.quantity, price: i.price }))
+          )
+        )
+      : whatsAppOrderUrl(settings.whatsappNumber);
 
   return (
     <>
@@ -122,6 +135,17 @@ export default function FloatingCart() {
                       Proceed to Checkout
                     </MagneticButton>
                   </Link>
+                  <a
+                    href={whatsappHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setCartOpen(false)}
+                    className="w-full flex items-center justify-center gap-2 py-3 bg-green-600 rounded-full
+                               font-semibold hover:bg-green-700 transition-colors text-center"
+                  >
+                    <MessageCircle size={18} />
+                    Order on WhatsApp
+                  </a>
                 </div>
               )}
             </motion.div>

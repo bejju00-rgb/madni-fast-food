@@ -1,15 +1,19 @@
-import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
+import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/site";
+import { getPublicSiteSettings, toWhatsAppDigits } from "@/lib/site-settings";
 
-export default function JsonLd() {
+export default async function JsonLd() {
+  const settings = await getPublicSiteSettings();
+  const wa = toWhatsAppDigits(settings.whatsappNumber);
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "Restaurant",
     name: SITE_NAME,
     description: SITE_DESCRIPTION,
-    url: SITE_URL,
+    url: process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || "http://localhost:3000",
     servesCuisine: ["Shawarma", "Burgers", "Pizza", "Fast Food"],
     priceRange: "$$",
-    telephone: "+923223572541",
+    telephone: `+${wa}`,
     address: {
       "@type": "PostalAddress",
       addressCountry: "PK",
@@ -29,12 +33,12 @@ export default function JsonLd() {
       closes: "02:00",
     },
     sameAs: [
-      "https://facebook.com/akmal.raza.9619",
-      "https://instagram.com/akmal.raza.9619",
+      `https://facebook.com/${settings.facebookHandle}`,
+      `https://instagram.com/${settings.instagramHandle}`,
     ],
     potentialAction: {
       "@type": "OrderAction",
-      target: `${SITE_URL}/menu`,
+      target: `${process.env.NEXT_PUBLIC_SITE_URL || ""}/menu`,
     },
   };
 

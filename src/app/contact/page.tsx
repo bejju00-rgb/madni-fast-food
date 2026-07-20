@@ -3,8 +3,16 @@
 import { motion } from "framer-motion";
 import { Phone, MapPin, Clock, MessageCircle } from "lucide-react";
 import MagneticButton from "@/components/ui/MagneticButton";
+import { useSiteSettings } from "@/components/providers/SiteSettingsProvider";
+import {
+  formatPhoneDisplay,
+  whatsAppOrderUrl,
+} from "@/lib/site-settings";
 
 export default function ContactPage() {
+  const settings = useSiteSettings();
+  const whatsappHref = whatsAppOrderUrl(settings.whatsappNumber);
+
   return (
     <div className="min-h-screen pt-24 section-padding">
       <div className="max-w-4xl mx-auto">
@@ -34,9 +42,12 @@ export default function ContactPage() {
                   <Phone size={20} className="text-orange" />
                 </div>
                 <div>
-                  <p className="text-white/50 text-sm">Phone</p>
-                  <p className="font-semibold">0322-3572541</p>
-                  <p className="font-semibold">0307-6980041</p>
+                  <p className="text-white/50 text-sm">JazzCash</p>
+                  <p className="font-semibold">{formatPhoneDisplay(settings.jazzcashNumber)}</p>
+                  <p className="text-white/50 text-sm mt-2">Easypaisa</p>
+                  <p className="font-semibold">{formatPhoneDisplay(settings.easypaisaNumber)}</p>
+                  <p className="text-white/50 text-sm mt-2">WhatsApp</p>
+                  <p className="font-semibold">{formatPhoneDisplay(settings.whatsappNumber)}</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -60,7 +71,7 @@ export default function ContactPage() {
             </div>
 
             <a
-              href="https://wa.me/923223572541"
+              href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-8 flex items-center justify-center gap-2 w-full py-3 bg-green-600 rounded-full

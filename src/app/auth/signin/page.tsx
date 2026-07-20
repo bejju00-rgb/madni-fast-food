@@ -25,7 +25,7 @@ export default function SignInPage() {
   const handleSignIn = async (data: SignInInput) => {
     const result = await signIn("credentials", {
       phone: data.phone,
-      password: data.password || data.phone,
+      password: data.password,
       redirect: false,
     });
 
@@ -45,7 +45,7 @@ export default function SignInPage() {
     const result = await signIn("credentials", {
       phone: data.phone,
       name: data.name,
-      password: data.phone,
+      password: data.password,
       isRegister: "true",
       redirect: false,
     });
@@ -107,6 +107,22 @@ export default function SignInPage() {
                 )}
               </div>
               <div>
+                <label className="text-sm text-white/60 mb-1 block">Password</label>
+                <input
+                  type="password"
+                  {...signUpForm.register("password")}
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl
+                             focus:outline-none focus:border-orange/50 transition-colors"
+                  placeholder="Choose a password (min 6 characters)"
+                  autoComplete="new-password"
+                />
+                {signUpForm.formState.errors.password && (
+                  <p className="text-red-400 text-xs mt-1">
+                    {signUpForm.formState.errors.password.message}
+                  </p>
+                )}
+              </div>
+              <div>
                 <label className="text-sm text-white/60 mb-1 block">Address</label>
                 <input
                   {...signUpForm.register("address")}
@@ -153,9 +169,11 @@ export default function SignInPage() {
                              focus:outline-none focus:border-orange/50 transition-colors"
                   placeholder="Enter your password"
                 />
-                <p className="text-white/30 text-xs mt-1">
-                  Regular users: your password is your phone number
-                </p>
+                {signInForm.formState.errors.password && (
+                  <p className="text-red-400 text-xs mt-1">
+                    {signInForm.formState.errors.password.message}
+                  </p>
+                )}
               </div>
               <button type="submit" className="w-full btn-primary py-4">
                 Sign In

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 type SettingsForm = {
@@ -61,6 +62,7 @@ function mapApiToForm(data: Record<string, unknown> | null): SettingsForm {
 }
 
 export default function AdminSettingsPage() {
+  const router = useRouter();
   const [settings, setSettings] = useState<SettingsForm>(emptySettings);
   const [account, setAccount] = useState<AccountForm>(emptyAccount);
   const [loading, setLoading] = useState(true);
@@ -111,6 +113,7 @@ export default function AdminSettingsPage() {
       const saved = await res.json();
       setSettings(mapApiToForm(saved));
       toast.success("Store settings saved");
+      router.refresh();
     } catch {
       toast.error("Failed to save store settings");
     } finally {
@@ -166,7 +169,9 @@ export default function AdminSettingsPage() {
       <section className="glass rounded-2xl p-6 space-y-4">
         <h2 className="font-montserrat font-bold text-lg">Store & payments</h2>
         <p className="text-white/40 text-sm">
-          WhatsApp, delivery fee, and payment numbers shown to customers.
+          WhatsApp, delivery fee, and payment numbers shown across the website. Use format{" "}
+          <code className="text-orange/80">03076980041</code> or{" "}
+          <code className="text-orange/80">923076980041</code>.
         </p>
         {loading ? (
           <p className="text-white/50 text-sm">Loading…</p>

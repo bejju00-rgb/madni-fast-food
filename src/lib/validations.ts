@@ -3,13 +3,14 @@ import { z } from "zod";
 export const signUpSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   phone: z.string().regex(/^03\d{9}$/, "Enter valid Pakistani phone (03XXXXXXXXX)"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
   address: z.string().min(5, "Address is required"),
   city: z.string().min(2, "City is required"),
 });
 
 export const signInSchema = z.object({
   phone: z.string().regex(/^03\d{9}$/, "Enter valid Pakistani phone (03XXXXXXXXX)"),
-  password: z.string().optional(),
+  password: z.string().min(1, "Password is required"),
 });
 
 export const checkoutSchema = z.object({

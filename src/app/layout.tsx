@@ -6,6 +6,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import JsonLd from "@/components/seo/JsonLd";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL, SITE_KEYWORDS } from "@/lib/site";
+import { getPublicSiteSettings } from "@/lib/site-settings";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -66,12 +67,14 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const siteSettings = await getPublicSiteSettings();
+
   return (
     <html lang="en" className={`${poppins.variable} ${montserrat.variable}`}>
       <body className="font-poppins antialiased">
         <JsonLd />
-        <Providers>
+        <Providers siteSettings={siteSettings}>
           <Navbar />
           <main>{children}</main>
           <Footer />

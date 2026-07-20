@@ -2,13 +2,24 @@
 
 import Link from "next/link";
 import NavLink from "@/components/ui/NavLink";
-import { Phone, Mail, MapPin, Facebook, Instagram } from "lucide-react";
+import { Phone, MapPin, Facebook, Instagram } from "lucide-react";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
+import { useSiteSettings } from "@/components/providers/SiteSettingsProvider";
+import {
+  formatPhoneDisplay,
+  whatsAppOrderUrl,
+} from "@/lib/site-settings";
 
 export default function Footer() {
   const pathname = usePathname();
+  const settings = useSiteSettings();
+
   if (pathname.startsWith("/admin")) return null;
+
+  const whatsappHref = whatsAppOrderUrl(settings.whatsappNumber);
+  const phoneLine = `${formatPhoneDisplay(settings.jazzcashNumber)} / ${formatPhoneDisplay(settings.easypaisaNumber)}`;
+  const whatsappDisplay = formatPhoneDisplay(settings.whatsappNumber);
 
   return (
     <footer className="relative bg-dark border-t border-white/5 overflow-hidden">
@@ -66,7 +77,11 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-white/50 text-sm">
                 <Phone size={14} className="text-orange" />
-                0322-3572541 / 0307-6980041
+                {phoneLine}
+              </li>
+              <li className="flex items-center gap-2 text-white/50 text-sm">
+                <Phone size={14} className="text-orange" />
+                WhatsApp: {whatsappDisplay}
               </li>
               <li className="flex items-center gap-2 text-white/50 text-sm">
                 <MapPin size={14} className="text-orange" />
@@ -84,7 +99,7 @@ export default function Footer() {
             <h4 className="font-montserrat font-bold text-lg mb-4">Follow Us</h4>
             <div className="flex gap-3">
               <a
-                href="https://facebook.com/akmal.raza.9619"
+                href={`https://facebook.com/${settings.facebookHandle}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-3 rounded-full glass hover:bg-orange/20 transition-colors"
@@ -92,7 +107,7 @@ export default function Footer() {
                 <Facebook size={18} />
               </a>
               <a
-                href="https://instagram.com/akmal.raza.9619"
+                href={`https://instagram.com/${settings.instagramHandle}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-3 rounded-full glass hover:bg-orange/20 transition-colors"
@@ -101,7 +116,7 @@ export default function Footer() {
               </a>
             </div>
             <a
-              href="https://wa.me/923223572541"
+              href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-600 rounded-full
@@ -117,7 +132,9 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Madni Fast Food. All rights reserved.
           </p>
           <p className="text-white/40 text-sm">
-            Developed by <span className="text-orange/80 font-medium">Ahmad Ali Abraiz</span>
+            Developed by{" "}
+            <span className="text-orange/80 font-medium">Yasar Ali</span> and his Student{" "}
+            <span className="text-orange/80 font-medium">Ahmad Ali Abraiz</span>
           </p>
         </div>
       </div>

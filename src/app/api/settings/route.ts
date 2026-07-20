@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
@@ -54,6 +55,8 @@ export async function PUT(request: Request) {
       : await prisma.settings.create({
           data: { id: SETTINGS_ID, ...data },
         });
+
+    revalidateTag("site-settings");
 
     return NextResponse.json(settings);
   } catch {

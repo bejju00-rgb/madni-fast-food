@@ -16,6 +16,7 @@ export async function GET() {
 
     const orders = await prisma.order.findMany({
       where,
+      take: session.user.role === "ADMIN" ? 100 : undefined,
       include: { user: { select: { name: true, phone: true } } },
       orderBy: { createdAt: "desc" },
     });

@@ -35,7 +35,7 @@ function AppToaster() {
 
 function useShowCustomCursor() {
   const pathname = usePathname();
-  return pathname === "/";
+  return !pathname.startsWith("/admin");
 }
 
 export default function Providers({ children }: { children: React.ReactNode }) {

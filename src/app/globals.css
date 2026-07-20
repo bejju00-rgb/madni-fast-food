@@ -40,6 +40,10 @@
     cursor: none;
   }
 
+  body.admin-panel {
+    cursor: auto;
+  }
+
   ::selection {
     @apply bg-orange text-white;
   }

@@ -83,7 +83,7 @@ export default function CustomCursor() {
     <>
       <div
         ref={cursorRef}
-        className="fixed top-0 left-0 w-4 h-4 bg-orange rounded-full pointer-events-none z-[9999] mix-blend-difference hidden md:block"
+        className="fixed top-0 left-0 w-4 h-4 bg-orange rounded-full pointer-events-none z-[9999] hidden md:block shadow-[0_0_12px_rgba(255,107,0,0.8)]"
         style={{
           transition: "width 0.3s, height 0.3s",
           width: isHovering ? 16 : 8,

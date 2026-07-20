@@ -1,56 +1,15 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import {
-  ShoppingBag,
-  DollarSign,
-  Clock,
-  Users,
-  TrendingUp,
-} from "lucide-react";
+import { ShoppingBag, DollarSign, Clock, Users, TrendingUp } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
+import { getAdminAnalytics } from "@/lib/admin-data";
 
-interface Analytics {
-  totalOrders: number;
-  totalRevenue: number;
-  pendingOrders: number;
-  totalCustomers: number;
-  dailySales: { total: number; count: number };
-  weeklySales: { total: number; count: number };
-  monthlySales: { total: number; count: number };
-  recentOrders: Array<{
-    id: string;
-    orderNumber: string;
-    total: number;
-    status: string;
-    customerName: string;
-    createdAt: string;
-  }>;
-}
-
-export default function AdminDashboard() {
-  const [data, setData] = useState<Analytics | null>(null);
-
-  useEffect(() => {
-    fetch("/api/admin/analytics")
-      .then((r) => r.json())
-      .then(setData);
-  }, []);
-
-  if (!data) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin w-8 h-8 border-2 border-orange border-t-transparent rounded-full" />
-      </div>
-    );
-  }
+export default async function AdminDashboard() {
+  const data = await getAdminAnalytics();
 
   const stats = [
-    { label: "Total Orders", value: data.totalOrders, icon: ShoppingBag, color: "text-blue-400" },
+    { label: "Total Orders", value: String(data.totalOrders), icon: ShoppingBag, color: "text-blue-400" },
     { label: "Revenue", value: formatPrice(data.totalRevenue), icon: DollarSign, color: "text-green-400" },
-    { label: "Pending", value: data.pendingOrders, icon: Clock, color: "text-yellow-400" },
-    { label: "Customers", value: data.totalCustomers, icon: Users, color: "text-purple-400" },
+    { label: "Pending", value: String(data.pendingOrders), icon: Clock, color: "text-yellow-400" },
+    { label: "Customers", value: String(data.totalCustomers), icon: Users, color: "text-purple-400" },
   ];
 
   const salesPeriods = [
@@ -64,20 +23,14 @@ export default function AdminDashboard() {
       <h1 className="text-2xl font-montserrat font-black mb-8">Dashboard</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {stats.map((stat, i) => (
-          <motion.div
-            key={stat.label}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="glass rounded-2xl p-6"
-          >
+        {stats.map((stat) => (
+          <div key={stat.label} className="glass rounded-2xl p-6">
             <div className="flex items-center justify-between mb-3">
               <stat.icon size={20} className={stat.color} />
             </div>
             <div className="text-2xl font-bold">{stat.value}</div>
             <div className="text-white/50 text-sm">{stat.label}</div>
-          </motion.div>
+          </div>
         ))}
       </div>
 
@@ -113,9 +66,7 @@ export default function AdminDashboard() {
                   <td className="py-3">{order.customerName}</td>
                   <td className="py-3 text-orange">{formatPrice(order.total)}</td>
                   <td className="py-3">
-                    <span className="px-2 py-1 rounded-full text-xs bg-white/5">
-                      {order.status}
-                    </span>
+                    <span className="px-2 py-1 rounded-full text-xs bg-white/5">{order.status}</span>
                   </td>
                 </tr>
               ))}

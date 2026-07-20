@@ -9,7 +9,7 @@ import { useCartStore } from "@/store/cart";
 import type { Deal } from "@/types";
 import toast from "react-hot-toast";
 import MagneticButton from "@/components/ui/MagneticButton";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, ChevronRight } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -60,7 +60,16 @@ export default function DealsSection({ deals }: DealsSectionProps) {
         </div>
       </div>
 
-      <div className="overflow-x-auto pb-20 scrollbar-hide">
+      <div className="relative">
+        <div className="pointer-events-none absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-10
+                        flex flex-col items-center gap-1 text-orange">
+          <ChevronRight size={28} className="animate-bounce-x" />
+          <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-white/60">
+            Swipe
+          </span>
+        </div>
+
+        <div className="overflow-x-auto pb-20 scrollbar-hide">
         <div className="flex gap-6 px-8 w-max min-w-full">
           {deals.map((deal) => (
             <div
@@ -102,6 +111,7 @@ export default function DealsSection({ deals }: DealsSectionProps) {
               </div>
             </div>
           ))}
+        </div>
         </div>
       </div>
     </section>

@@ -23,6 +23,7 @@ const config: Config = {
         "marquee-reverse": "marquee-reverse 30s linear infinite",
         float: "float 6s ease-in-out infinite",
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "bounce-x": "bounce-x 1.2s ease-in-out infinite",
       },
       keyframes: {
         marquee: {
@@ -40,6 +41,10 @@ const config: Config = {
         "pulse-glow": {
           "0%, 100%": { boxShadow: "0 0 20px rgba(255, 107, 0, 0.3)" },
           "50%": { boxShadow: "0 0 40px rgba(255, 107, 0, 0.6)" },
+        },
+        "bounce-x": {
+          "0%, 100%": { transform: "translateX(0)" },
+          "50%": { transform: "translateX(6px)" },
         },
       },
     },

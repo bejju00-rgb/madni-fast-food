@@ -27,7 +27,7 @@ export default function CustomCursor() {
       mouseX = e.clientX;
       mouseY = e.clientY;
 
-      if (Math.random() > 0.7) {
+      if (Math.random() > 0.92) {
         const id = particleId.current++;
         const particle = { x: e.clientX, y: e.clientY, id };
         setParticles((prev) => [...prev.slice(-15), particle]);

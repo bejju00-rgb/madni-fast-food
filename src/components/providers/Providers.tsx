@@ -19,7 +19,9 @@ function AppToaster() {
   return (
     <Toaster
       position="top-right"
+      gutter={8}
       toastOptions={{
+        duration: 2000,
         style: {
           background: "#1a1a1a",
           color: "#fff",
@@ -31,12 +33,18 @@ function AppToaster() {
   );
 }
 
+function useShowCustomCursor() {
+  const pathname = usePathname();
+  return pathname === "/";
+}
+
 export default function Providers({ children }: { children: React.ReactNode }) {
   const lightweight = useLightweightMode();
+  const showCursor = useShowCustomCursor();
 
   return (
     <SessionProvider>
-      <CustomCursor />
+      {showCursor && <CustomCursor />}
       {lightweight ? (
         <>
           {children}

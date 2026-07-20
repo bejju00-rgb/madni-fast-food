@@ -26,7 +26,11 @@ export async function GET(request: Request) {
       orderBy: { name: "asc" },
     });
 
-    return NextResponse.json(products);
+    return NextResponse.json(products, {
+      headers: {
+        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+      },
+    });
   } catch {
     return NextResponse.json({ error: "Failed to fetch products" }, { status: 500 });
   }

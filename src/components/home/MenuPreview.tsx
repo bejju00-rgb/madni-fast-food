@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import NavLink from "@/components/ui/NavLink";
+import { ChevronRight } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import FoodCard from "@/components/ui/FoodCard";
@@ -60,6 +61,20 @@ export default function MenuPreview({ products }: MenuPreviewProps) {
             </MagneticButton>
           </NavLink>
         </div>
+
+        <a
+          href="#deals"
+          className="mt-10 flex items-center justify-end gap-2 max-w-7xl mx-auto px-2 text-orange
+                     hover:text-yellow transition-colors group"
+        >
+          <span className="text-sm sm:text-base font-medium text-white/70 group-hover:text-white">
+            Scroll to view deals
+          </span>
+          <span className="flex items-center justify-center w-10 h-10 rounded-full glass
+                           animate-pulse group-hover:bg-orange/20">
+            <ChevronRight size={22} className="text-orange" />
+          </span>
+        </a>
       </div>
     </section>
   );

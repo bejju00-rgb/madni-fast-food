@@ -33,11 +33,7 @@ export default function SignInPage() {
       toast.error(result.error);
     } else {
       toast.success("Welcome back!");
-      if (data.phone === "03000000000") {
-        router.push("/admin");
-      } else {
-        router.push("/dashboard");
-      }
+      router.push("/");
     }
   };
 
@@ -54,7 +50,7 @@ export default function SignInPage() {
       toast.error(result.error);
     } else {
       toast.success("Account created successfully!");
-      router.push("/dashboard");
+      router.push("/");
     }
   };
 

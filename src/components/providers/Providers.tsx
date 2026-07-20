@@ -10,6 +10,7 @@ import ScrollTriggerCleanup from "@/components/providers/ScrollTriggerCleanup";
 import FloatingCart from "@/components/cart/FloatingCart";
 import { SiteSettingsProvider } from "@/components/providers/SiteSettingsProvider";
 import InstallAppButton from "@/components/pwa/InstallAppButton";
+import PushNotifications from "@/components/pwa/PushNotifications";
 import type { PublicSiteSettings } from "@/lib/site-settings";
 
 function useLightweightMode() {
@@ -59,6 +60,7 @@ export default function Providers({
             {children}
             <FloatingCart />
             <InstallAppButton />
+            <PushNotifications />
             <AppToaster />
           </>
         ) : (
@@ -68,6 +70,7 @@ export default function Providers({
             {children}
             <FloatingCart />
             <InstallAppButton />
+            <PushNotifications />
             <AppToaster />
           </SmoothScroll>
         )}

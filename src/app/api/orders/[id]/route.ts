@@ -3,6 +3,7 @@ import { revalidateTag } from "next/cache";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { orderStatusMessage, sendPushToUser } from "@/lib/push";
 
 export async function PATCH(
   request: Request,
@@ -23,6 +24,11 @@ export async function PATCH(
     });
 
     revalidateTag("admin-analytics");
+
+    void sendPushToUser(
+      order.userId,
+      orderStatusMessage(order.orderNumber, String(order.status), order.id)
+    );
 
     return NextResponse.json(order);
   } catch {

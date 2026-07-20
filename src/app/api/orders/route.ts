@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { generateOrderNumber } from "@/lib/utils";
 import { getPublicSiteSettings } from "@/lib/site-settings";
+import { newOrderAdminMessage, sendPushToAdmins } from "@/lib/push";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -77,6 +78,10 @@ export async function POST(request: Request) {
         couponCode: body.couponCode,
       },
     });
+
+    void sendPushToAdmins(
+      newOrderAdminMessage(order.orderNumber, order.customerName, order.total)
+    );
 
     return NextResponse.json(order, { status: 201 });
   } catch {

@@ -67,7 +67,17 @@
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-orange via-yellow to-orange bg-clip-text text-transparent;
+    @apply text-orange;
+  }
+
+  @media (min-width: 768px) {
+    .gradient-text {
+      color: transparent;
+      background-image: linear-gradient(90deg, #ff6b00, #ffc107, #ff6b00);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
   }
 
   .btn-primary {

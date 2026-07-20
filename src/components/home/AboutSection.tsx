@@ -82,7 +82,7 @@ export default function AboutSection() {
                 key={stat.label}
                 className="about-stat glass rounded-2xl p-6 text-center hover:border-orange/30 transition-colors"
               >
-                <div className="text-3xl sm:text-4xl font-montserrat font-black gradient-text mb-2">
+                <div className="text-3xl sm:text-4xl font-montserrat font-black text-orange mb-2">
                   {stat.number}
                 </div>
                 <div className="text-white/50 text-sm">{stat.label}</div>

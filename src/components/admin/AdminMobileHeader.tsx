@@ -5,14 +5,7 @@ import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
-
-const links = [
-  { href: "/admin", label: "Dashboard" },
-  { href: "/admin/orders", label: "Orders" },
-  { href: "/admin/products", label: "Products" },
-  { href: "/admin/deals", label: "Deals" },
-  { href: "/admin/categories", label: "Categories" },
-];
+import { ADMIN_NAV_LINKS } from "@/lib/admin-nav";
 
 export default function AdminMobileHeader() {
   const pathname = usePathname();
@@ -41,13 +34,13 @@ export default function AdminMobileHeader() {
         </div>
       </div>
       {open && (
-        <nav className="px-4 pb-4 flex flex-col gap-1 border-t border-white/5">
-          {links.map((link) => (
+        <nav className="px-4 pb-4 flex flex-col gap-1 border-t border-white/5 max-h-[70vh] overflow-y-auto">
+          {ADMIN_NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className={`px-3 py-2 rounded-lg text-sm ${
+              className={`px-3 py-2.5 rounded-lg text-sm ${
                 pathname === link.href ? "bg-orange/10 text-orange" : "text-white/70"
               }`}
             >

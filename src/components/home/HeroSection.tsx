@@ -89,8 +89,8 @@ export default function HeroSection() {
       <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
         <div ref={headingRef} className="mb-6">
           <h1 className="overflow-hidden">
-            <span className="hero-line block text-4xl sm:text-6xl lg:text-7xl font-montserrat font-black">
-              <span className="gradient-text">Madni Shawarma</span>
+            <span className="hero-line block text-4xl sm:text-6xl lg:text-7xl font-montserrat font-black text-orange">
+              Madni Shawarma
             </span>
             <span className="hero-line block text-4xl sm:text-6xl lg:text-7xl font-montserrat font-black text-white">
               Burgur & Pizza

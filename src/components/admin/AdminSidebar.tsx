@@ -15,16 +15,23 @@ import {
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 
-const links = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/orders", label: "Orders", icon: ShoppingBag },
-  { href: "/admin/products", label: "Products", icon: Package },
-  { href: "/admin/deals", label: "Deals", icon: Tag },
-  { href: "/admin/categories", label: "Categories", icon: FolderOpen },
-  { href: "/admin/coupons", label: "Coupons", icon: Ticket },
-  { href: "/admin/videos", label: "Videos", icon: Video },
-  { href: "/admin/settings", label: "Settings", icon: Settings },
-];
+import { ADMIN_NAV_LINKS } from "@/lib/admin-nav";
+
+const iconByHref: Record<string, typeof LayoutDashboard> = {
+  "/admin": LayoutDashboard,
+  "/admin/orders": ShoppingBag,
+  "/admin/products": Package,
+  "/admin/deals": Tag,
+  "/admin/categories": FolderOpen,
+  "/admin/coupons": Ticket,
+  "/admin/videos": Video,
+  "/admin/settings": Settings,
+};
+
+const links = ADMIN_NAV_LINKS.map((item) => ({
+  ...item,
+  icon: iconByHref[item.href] ?? LayoutDashboard,
+}));
 
 export default function AdminSidebar() {
   const pathname = usePathname();

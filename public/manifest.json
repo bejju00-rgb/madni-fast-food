@@ -1,0 +1,17 @@
+{
+  "name": "Madni Shawarma Burgur & Pizza",
+  "short_name": "Madni Shawarma",
+  "description": "Shawarma, Burgers & Pizza delivery",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0A0A",
+  "theme_color": "#FF6B00",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

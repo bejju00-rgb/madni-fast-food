@@ -1,0 +1,157 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  JAZZCASH
+  EASYPAISA
+  CASH_ON_DELIVERY
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model User {
+  id        String    @id @default(cuid())
+  name      String
+  phone     String    @unique
+  email     String?   @unique
+  password  String?
+  role      UserRole  @default(USER)
+  addresses Address[]
+  orders    Order[]
+  favorites Favorite[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Address {
+  id        String  @id @default(cuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  label     String  @default("Home")
+  address   String
+  city      String
+  landmark  String?
+  isDefault Boolean @default(false)
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  slug      String    @unique
+  image     String?
+  sortOrder Int       @default(0)
+  products  Product[]
+  createdAt DateTime  @default(now())
+}
+
+model Product {
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  price       Float
+  image       String?
+  categoryId  String
+  category    Category   @relation(fields: [categoryId], references: [id])
+  available   Boolean    @default(true)
+  featured    Boolean    @default(false)
+  favorites   Favorite[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Deal {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  price       Float
+  items       String[]
+  image       String?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Order {
+  id            String        @id @default(cuid())
+  orderNumber   String        @unique
+  userId        String
+  user          User          @relation(fields: [userId], references: [id])
+  items         Json
+  address       String
+  city          String
+  landmark      String?
+  notes         String?
+  phone         String
+  customerName  String
+  paymentMethod PaymentMethod
+  status        OrderStatus   @default(PENDING)
+  subtotal      Float
+  deliveryCharge Float        @default(0)
+  discount      Float         @default(0)
+  total         Float
+  couponCode    String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Coupon {
+  id            String   @id @default(cuid())
+  code          String   @unique
+  discountType  String   @default("percentage")
+  discountValue Float
+  minOrder      Float    @default(0)
+  maxUses       Int?
+  usedCount     Int      @default(0)
+  active        Boolean  @default(true)
+  expiresAt     DateTime?
+  createdAt     DateTime @default(now())
+}
+
+model Favorite {
+  id        String  @id @default(cuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+}
+
+model Video {
+  id        String   @id @default(cuid())
+  title     String
+  url       String
+  active    Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model Settings {
+  id             String @id @default(cuid())
+  deliveryCharge Float  @default(150)
+  whatsappNumber String @default("923223572541")
+  jazzcashNumber String @default("0322-3572541")
+  jazzcashName   String @default("Madni Fast Food")
+  easypaisaNumber String @default("0307-6980041")
+  easypaisaName  String @default("Madni Fast Food")
+  facebookHandle String @default("@akmal.raza.9619")
+  instagramHandle String @default("@akmal.raza.9619")
+}

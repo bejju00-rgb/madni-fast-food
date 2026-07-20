@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-dark: #0a0a0a;
+    --color-orange: #ff6b00;
+    --color-yellow: #ffc107;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  html.lenis, html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  body {
+    @apply bg-dark text-white font-poppins overflow-x-hidden;
+    cursor: none;
+  }
+
+  ::selection {
+    @apply bg-orange text-white;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-dark;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-orange rounded-full;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+  }
+
+  .glass-dark {
+    @apply bg-dark/80 backdrop-blur-xl border border-white/5;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-orange via-yellow to-orange bg-clip-text text-transparent;
+  }
+
+  .btn-primary {
+    @apply relative px-8 py-3 bg-orange text-white font-semibold rounded-full
+           overflow-hidden transition-all duration-300 hover:bg-orange-dark
+           hover:shadow-lg hover:shadow-orange/30 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply relative px-8 py-3 border-2 border-orange text-orange font-semibold
+           rounded-full overflow-hidden transition-all duration-300
+           hover:bg-orange hover:text-white active:scale-95;
+  }
+
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8 py-20 lg:py-32;
+  }
+
+  .food-card {
+    @apply relative bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10
+           overflow-hidden transition-all duration-500 hover:border-orange/50
+           hover:shadow-2xl hover:shadow-orange/10;
+  }
+
+  .admin-select {
+    @apply px-4 py-3 bg-[#1a1a1a] border border-white/10 rounded-xl text-white
+           focus:outline-none focus:border-orange/50 transition-colors;
+  }
+
+  .admin-select option {
+    background-color: #1a1a1a;
+    color: #ffffff;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    cursor: auto;
+  }
+}
+
+body.use-default-cursor {
+  cursor: auto;
+}

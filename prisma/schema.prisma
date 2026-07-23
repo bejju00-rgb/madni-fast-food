@@ -166,4 +166,6 @@ model Settings {
   facebookHandle String @default("@akmal.raza.9619")
   instagramHandle String @default("@akmal.raza.9619")
   logoUrl         String?
+  heroOpenTime    String @default("6 PM")
+  heroCloseTime   String @default("2 AM")
 }

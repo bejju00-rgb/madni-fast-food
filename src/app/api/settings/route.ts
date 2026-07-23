@@ -16,6 +16,8 @@ const editableFields = [
   "facebookHandle",
   "instagramHandle",
   "logoUrl",
+  "heroOpenTime",
+  "heroCloseTime",
 ] as const;
 
 async function getSettingsRecord() {

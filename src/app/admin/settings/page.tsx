@@ -14,6 +14,8 @@ type SettingsForm = {
   jazzcashName: string;
   easypaisaNumber: string;
   easypaisaName: string;
+  heroOpenTime: string;
+  heroCloseTime: string;
 };
 
 type AccountForm = {
@@ -33,6 +35,8 @@ const emptySettings: SettingsForm = {
   jazzcashName: "",
   easypaisaNumber: "",
   easypaisaName: "",
+  heroOpenTime: "6 PM",
+  heroCloseTime: "2 AM",
 };
 
 const emptyAccount: AccountForm = {
@@ -44,16 +48,16 @@ const emptyAccount: AccountForm = {
   confirmPassword: "",
 };
 
-const paymentFieldKeys: (keyof Omit<SettingsForm, "logoUrl">)[] = [
+const paymentFieldKeys = [
   "deliveryCharge",
   "whatsappNumber",
   "jazzcashNumber",
   "jazzcashName",
   "easypaisaNumber",
   "easypaisaName",
-];
+] as const;
 
-const settingLabels: Record<keyof Omit<SettingsForm, "logoUrl">, string> = {
+const settingLabels: Record<(typeof paymentFieldKeys)[number], string> = {
   deliveryCharge: "Delivery charge (Rs.)",
   whatsappNumber: "WhatsApp number",
   jazzcashNumber: "JazzCash number",
@@ -72,6 +76,8 @@ function mapApiToForm(data: Record<string, unknown> | null): SettingsForm {
     jazzcashName: String(data.jazzcashName ?? ""),
     easypaisaNumber: String(data.easypaisaNumber ?? ""),
     easypaisaName: String(data.easypaisaName ?? ""),
+    heroOpenTime: String(data.heroOpenTime ?? "6 PM"),
+    heroCloseTime: String(data.heroCloseTime ?? "2 AM"),
   };
 }
 
@@ -208,6 +214,49 @@ export default function AdminSettingsPage() {
           className="px-6 py-3 bg-orange rounded-xl font-semibold disabled:opacity-50"
         >
           {savingStore ? "Saving…" : "Save logo"}
+        </button>
+      </section>
+
+      <section className="glass rounded-2xl p-6 space-y-4">
+        <h2 className="font-montserrat font-bold text-lg">Hero opening hours</h2>
+        <p className="text-white/40 text-sm">
+          Shown at the top of the homepage hero. Example:{" "}
+          <code className="text-orange/80">6 PM</code> and <code className="text-orange/80">2 AM</code>.
+        </p>
+        {loading ? (
+          <p className="text-white/50 text-sm">Loading…</p>
+        ) : (
+          <>
+            <div>
+              <label className="text-sm text-white/50 block mb-1">Opening time</label>
+              <input
+                value={settings.heroOpenTime}
+                onChange={(e) => setSettings({ ...settings, heroOpenTime: e.target.value })}
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-orange/50"
+                placeholder="6 PM"
+              />
+            </div>
+            <div>
+              <label className="text-sm text-white/50 block mb-1">Closing time</label>
+              <input
+                value={settings.heroCloseTime}
+                onChange={(e) => setSettings({ ...settings, heroCloseTime: e.target.value })}
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-orange/50"
+                placeholder="2 AM"
+              />
+            </div>
+            <p className="text-white/50 text-sm">
+              Preview: Open from {settings.heroOpenTime || "6 PM"} to{" "}
+              {settings.heroCloseTime || "2 AM"}
+            </p>
+          </>
+        )}
+        <button
+          onClick={handleSaveStore}
+          disabled={loading || savingStore}
+          className="px-6 py-3 bg-orange rounded-xl font-semibold disabled:opacity-50"
+        >
+          {savingStore ? "Saving…" : "Save hero hours"}
         </button>
       </section>
 

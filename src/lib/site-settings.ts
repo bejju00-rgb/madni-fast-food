@@ -11,6 +11,8 @@ export type PublicSiteSettings = {
   facebookHandle: string;
   instagramHandle: string;
   logoUrl: string;
+  heroOpenTime: string;
+  heroCloseTime: string;
 };
 
 export const DEFAULT_SITE_SETTINGS: PublicSiteSettings = {
@@ -23,6 +25,8 @@ export const DEFAULT_SITE_SETTINGS: PublicSiteSettings = {
   facebookHandle: "akmal.raza.9619",
   instagramHandle: "akmal.raza.9619",
   logoUrl: "",
+  heroOpenTime: "6 PM",
+  heroCloseTime: "2 AM",
 };
 
 function mapSettings(row: Record<string, unknown> | null): PublicSiteSettings {
@@ -43,6 +47,8 @@ function mapSettings(row: Record<string, unknown> | null): PublicSiteSettings {
       ""
     ),
     logoUrl: row.logoUrl ? String(row.logoUrl) : "",
+    heroOpenTime: String(row.heroOpenTime ?? DEFAULT_SITE_SETTINGS.heroOpenTime).trim(),
+    heroCloseTime: String(row.heroCloseTime ?? DEFAULT_SITE_SETTINGS.heroCloseTime).trim(),
   };
 }
 
@@ -62,6 +68,12 @@ export async function getPublicSiteSettings(): Promise<PublicSiteSettings> {
     revalidate: 60,
     tags: ["site-settings"],
   })();
+}
+
+export function formatHeroHours(openTime: string, closeTime: string): string {
+  const open = openTime.trim() || DEFAULT_SITE_SETTINGS.heroOpenTime;
+  const close = closeTime.trim() || DEFAULT_SITE_SETTINGS.heroCloseTime;
+  return `Open from ${open} to ${close}`;
 }
 
 /** Normalize to wa.me digits (e.g. 03076980041 → 923076980041). */

@@ -245,6 +245,8 @@ async function main() {
       jazzcashName: "Madni Fast Food",
       easypaisaNumber: "0307-6980041",
       easypaisaName: "Madni Fast Food",
+      heroOpenTime: "6 PM",
+      heroCloseTime: "2 AM",
     },
   });
 

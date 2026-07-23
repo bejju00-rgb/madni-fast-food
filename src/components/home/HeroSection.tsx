@@ -5,6 +5,8 @@ import NavLink from "@/components/ui/NavLink";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import MagneticButton from "@/components/ui/MagneticButton";
+import { useSiteSettings } from "@/components/providers/SiteSettingsProvider";
+import { formatHeroHours } from "@/lib/site-settings";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,6 +16,8 @@ const HERO_POSTER =
   "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1920&q=80";
 
 export default function HeroSection() {
+  const siteSettings = useSiteSettings();
+  const hoursLabel = formatHeroHours(siteSettings.heroOpenTime, siteSettings.heroCloseTime);
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
@@ -123,7 +127,7 @@ export default function HeroSection() {
                      bg-dark/50 backdrop-blur-md border border-orange/40 rounded-full
                      px-4 py-2.5 sm:px-6 sm:py-3 shadow-lg shadow-black/30"
         >
-          Open from 6 PM to 2 AM
+          {hoursLabel}
         </p>
 
         <div ref={headingRef} className="mb-6">

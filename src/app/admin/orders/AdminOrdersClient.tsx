@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { formatPrice } from "@/lib/utils";
 import toast from "react-hot-toast";
+import { Trash2 } from "lucide-react";
 
 interface Order {
   id: string;
@@ -38,6 +39,8 @@ export default function AdminOrdersClient({
   const [orders, setOrders] = useState(initialOrders);
   const [expanded, setExpanded] = useState<string | null>(null);
 
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
   const updateStatus = async (id: string, status: string) => {
     const res = await fetch(`/api/orders/${id}`, {
       method: "PATCH",
@@ -50,6 +53,29 @@ export default function AdminOrdersClient({
       toast.success("Status updated");
       router.refresh();
     }
+  };
+
+  const removeOrder = async (id: string, orderNumber: string) => {
+    if (
+      !confirm(
+        `Remove order ${orderNumber}? It will be deleted permanently and removed from dashboard revenue.`
+      )
+    ) {
+      return;
+    }
+
+    setDeletingId(id);
+    const res = await fetch(`/api/orders/${id}`, { method: "DELETE" });
+
+    if (res.ok) {
+      setOrders((prev) => prev.filter((o) => o.id !== id));
+      if (expanded === id) setExpanded(null);
+      toast.success("Order removed");
+      router.refresh();
+    } else {
+      toast.error("Could not remove order");
+    }
+    setDeletingId(null);
   };
 
   return (
@@ -69,11 +95,25 @@ export default function AdminOrdersClient({
                 <p className="font-semibold">{order.customerName}</p>
                 <p className="text-white/50 text-sm">{order.phone}</p>
               </div>
-              <div className="text-right">
+              <div className="text-right flex flex-col items-end gap-2">
                 <p className="font-bold text-orange">{formatPrice(order.total)}</p>
                 <p className="text-white/40 text-xs">
                   {new Date(order.createdAt).toLocaleString()}
                 </p>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    void removeOrder(order.id, order.orderNumber);
+                  }}
+                  disabled={deletingId === order.id}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium
+                             bg-red-500/15 text-red-300 border border-red-500/30 hover:bg-red-500/25
+                             disabled:opacity-50 transition-colors"
+                >
+                  <Trash2 size={14} />
+                  {deletingId === order.id ? "Removing…" : "Remove order"}
+                </button>
               </div>
             </div>
 
@@ -108,7 +148,11 @@ export default function AdminOrdersClient({
                   {statuses.map((status) => (
                     <button
                       key={status}
-                      onClick={() => updateStatus(order.id, status)}
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        void updateStatus(order.id, status);
+                      }}
                       className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
                         order.status === status
                           ? "bg-orange text-white"

@@ -117,6 +117,15 @@ export default function HeroSection() {
       </div>
 
       <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
+        <p
+          className="absolute top-20 sm:top-24 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-md
+                     text-sm sm:text-base md:text-lg font-semibold tracking-wide text-white
+                     bg-dark/50 backdrop-blur-md border border-orange/40 rounded-full
+                     px-4 py-2.5 sm:px-6 sm:py-3 shadow-lg shadow-black/30"
+        >
+          Open from 6 PM to 2 AM
+        </p>
+
         <div ref={headingRef} className="mb-6">
           <h1 className="overflow-hidden">
             <span className="hero-line block text-4xl sm:text-6xl lg:text-7xl font-montserrat font-black text-orange">
